@@ -1,0 +1,5 @@
+*.log
+*.conf
+*.env
+game.sdk.api
+lastupdate.tmp
