@@ -8,6 +8,7 @@ import (
 
 func main(){
 
+
 	//初始化路由
 	routers.Routers()
 	server.Server.Run(":"+conf.PORT)
