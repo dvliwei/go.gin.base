@@ -29,6 +29,7 @@ func Routers(){
 		user :=userController.UserController{}
 		//指定controller
 		userGroup.GET("/query",user.UserList)
+		userGroup.POST("/register",user.Register)
 
 
 	}
