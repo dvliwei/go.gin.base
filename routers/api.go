@@ -9,6 +9,8 @@ import (
 
 
 func Routers(){
+	//设置静态文件路口
+	server.Server.Static("/assets", "./assets")
 
 	v1:= server.Server.Group("v1")
 	//路由组中添加中间件
