@@ -22,7 +22,7 @@ modules/model    数据模型
 modules/Repositories 数据处理
 routers  路由
 cache  存放日志
-
+assets  静态文件夹
 ```
 
  

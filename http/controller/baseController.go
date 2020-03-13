@@ -69,3 +69,8 @@ func (this *GinBaseController) LocalDate() int64{
 
 //参数错误10000开头
 var HTTP_ERROR_REQUEST_HEADER_FAIL = GinResultError{Code:401,Message:"Unauthorized"}
+
+
+//参数错误20000开头业务错误
+
+var HTTP_ERROR_NOT_FOUND_USER = GinResultError{Code:20000,Message:"not  found user"}
