@@ -17,6 +17,10 @@ func (this *UserController) Add(ctx *gin.Context){
 }
 
 func (this *UserController) UserList(ctx *gin.Context)  {
+	//获取所有url里的参数
+	//items:=ctx.Request.URL.Query()
+	//os.Exit(1)
+
 	id ,_:=  strconv.Atoi(ctx.Query("user_id"))
 
 	//fmt.Println(id)

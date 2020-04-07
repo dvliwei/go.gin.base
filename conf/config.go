@@ -40,7 +40,7 @@ func init(){
 	SERVER_DB,err =gorm.Open(os.Getenv("DB_CONNECTION"),
 		os.Getenv("DB_USERNAME")+":"+
 			os.Getenv("DB_PASSWORD")+"" +
-			"@/"+os.Getenv("DB_DATABASE")+"?charset="+
+			"@tcp("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")/"+os.Getenv("DB_DATABASE")+"?charset="+
 			os.Getenv("DB_CHARSET")+"&parseTime=True&loc=Local")
 	if err!=nil{
 		log.Fatal("connection mysql fail", err.Error())

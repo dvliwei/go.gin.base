@@ -14,7 +14,7 @@ func Routers(){
 
 	v1:= server.Server.Group("v1")
 	//路由组中添加中间件
-	v1.Use(middleware.HttpHeaderVerification())
+	//v1.Use(middleware.HttpHeaderVerification())
 	v1.Use(middleware.AppMiddleWare())
 	{
 		v1.GET("/ping", func(context *gin.Context) {
