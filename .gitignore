@@ -1,5 +1,11 @@
 *.log
 *.conf
 *.env
-game.sdk.api
+go.xg.sdk
+go.sum
+/cache/log.*
+/assets/log.*
 lastupdate.tmp
+static/upload/*
+/vendor/*
+!/vendor/vendor.json

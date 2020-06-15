@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"gin.test/extension/log"
 	"gin.test/http/controller"
 	"gin.test/modules/user/userModel"
 	"gin.test/modules/user/userRepositories"
@@ -21,6 +22,7 @@ func (this *UserController) UserList(ctx *gin.Context)  {
 	//items:=ctx.Request.URL.Query()
 	//os.Exit(1)
 
+	log.PError("xxx")
 	id ,_:=  strconv.Atoi(ctx.Query("user_id"))
 
 	//fmt.Println(id)

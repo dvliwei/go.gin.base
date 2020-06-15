@@ -1,0 +1,111 @@
+# github.com/astaxie/beego v1.12.1
+## explicit
+github.com/astaxie/beego
+github.com/astaxie/beego/config
+github.com/astaxie/beego/config/env
+github.com/astaxie/beego/context
+github.com/astaxie/beego/context/param
+github.com/astaxie/beego/grace
+github.com/astaxie/beego/logs
+github.com/astaxie/beego/session
+github.com/astaxie/beego/toolbox
+github.com/astaxie/beego/utils
+# github.com/gin-contrib/sse v0.1.1-0.20190905051334-43f0f29dbd2b
+## explicit
+github.com/gin-contrib/sse
+# github.com/gin-gonic/gin v1.3.0
+## explicit
+github.com/gin-gonic/gin
+github.com/gin-gonic/gin/binding
+github.com/gin-gonic/gin/json
+github.com/gin-gonic/gin/render
+# github.com/go-playground/locales v0.13.0
+github.com/go-playground/locales
+github.com/go-playground/locales/currency
+# github.com/go-playground/universal-translator v0.17.0
+## explicit
+github.com/go-playground/universal-translator
+# github.com/go-redis/redis v6.14.2+incompatible
+## explicit
+github.com/go-redis/redis
+github.com/go-redis/redis/internal
+github.com/go-redis/redis/internal/consistenthash
+github.com/go-redis/redis/internal/hashtag
+github.com/go-redis/redis/internal/pool
+github.com/go-redis/redis/internal/proto
+github.com/go-redis/redis/internal/singleflight
+github.com/go-redis/redis/internal/util
+# github.com/go-sql-driver/mysql v1.4.1
+## explicit
+github.com/go-sql-driver/mysql
+# github.com/golang/protobuf v1.3.3
+## explicit
+github.com/golang/protobuf/proto
+# github.com/gpmgo/gopm v0.6.6-0.20170727211337-7edb73a0f439
+## explicit
+# github.com/jinzhu/gorm v1.9.11
+## explicit
+github.com/jinzhu/gorm
+# github.com/jinzhu/inflection v1.0.0
+## explicit
+github.com/jinzhu/inflection
+# github.com/joho/godotenv v1.3.1-0.20191020202522-b09de681dcaf
+## explicit
+github.com/joho/godotenv
+# github.com/json-iterator/go v1.1.10-0.20200206015604-7acbb404a45b
+## explicit
+github.com/json-iterator/go
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/leodido/go-urn v1.2.0
+## explicit
+github.com/leodido/go-urn
+# github.com/mattn/go-isatty v0.0.13-0.20200128103942-cb30d6282491
+## explicit
+github.com/mattn/go-isatty
+# github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
+## explicit
+github.com/modern-go/concurrent
+# github.com/modern-go/reflect2 v1.0.1
+## explicit
+github.com/modern-go/reflect2
+# github.com/onsi/ginkgo v1.8.0
+## explicit
+# github.com/onsi/gomega v1.5.0
+## explicit
+# github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
+## explicit
+# github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644
+## explicit
+github.com/shiena/ansicolor
+# github.com/sirupsen/logrus v1.4.3-0.20190518135202-2a22dbedbad1
+## explicit
+github.com/sirupsen/logrus
+# github.com/ugorji/go v1.1.8-0.20190812104308-42bc974514ff
+## explicit
+# github.com/ugorji/go/codec v1.1.7
+github.com/ugorji/go/codec
+# golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
+# golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+golang.org/x/net/idna
+# golang.org/x/sys v0.0.0-20200116001909-b77594299b42
+golang.org/x/sys/unix
+# golang.org/x/text v0.3.2
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+# google.golang.org/appengine v1.6.6-0.20191219230319-b6ce0843b556
+## explicit
+google.golang.org/appengine/cloudsql
+# gopkg.in/go-playground/validator.v8 v8.18.2
+## explicit
+gopkg.in/go-playground/validator.v8
+# gopkg.in/go-playground/validator.v9 v9.31.0
+## explicit
+gopkg.in/go-playground/validator.v9
+# gopkg.in/yaml.v2 v2.2.8
+## explicit
+gopkg.in/yaml.v2
