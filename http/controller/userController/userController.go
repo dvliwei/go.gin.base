@@ -1,11 +1,16 @@
 package userController
 
 import (
+	"fmt"
 	"gin.test/extension/log"
 	"gin.test/http/controller"
+	"gin.test/http/proto/httpReponseData"
 	"gin.test/modules/user/userModel"
 	"gin.test/modules/user/userRepositories"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/protobuf/proto"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 )
 
@@ -57,4 +62,37 @@ func (this *UserController) Register(c *gin.Context){
 	c.JSON(200, controller.HTTP_SUCCESS)
 	return
 
+}
+
+func (this *UserController) ProtoDemo(c *gin.Context)  {
+	//data :=map[string]string{"user_name":"天才","age":"18",}
+	//result :=new(httpReponseData.User)
+	//result.Name = "天才"
+	//result.Age= 12
+
+	data:=&httpReponseData.User{
+		Name:"天才",
+		Age:12,
+	}
+	c.ProtoBuf(http.StatusOK, data)
+	//c.JSON(200, data)
+	return
+
+}
+
+func (this *UserController)ParsingProtoDemo(c *gin.Context)  {
+	resp, err := http.Get("http://127.0.0.1:1213/v1/user/proto")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			user := &httpReponseData.User{}
+			proto.UnmarshalMerge(body, user)
+			fmt.Println(user.Age)
+		}
+	}
 }

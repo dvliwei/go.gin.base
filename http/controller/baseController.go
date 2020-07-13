@@ -11,6 +11,11 @@ func BindingController() *GinBaseController{
 	return &GinBaseController{}
 }
 
+type Foo struct {
+	Name string
+
+}
+
 type GinBaseController struct {
 }
 

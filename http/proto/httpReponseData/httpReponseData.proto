@@ -1,0 +1,13 @@
+// 这是protobuf的版本
+syntax = "proto3";
+
+
+//定义包名
+package httpReponseData;
+
+
+// 定义数据结构，message 类似golang中的struct
+message User {
+  string name = 1;   // 定义一个string类型的字段name, 序号为1
+  int32 age = 2;   // 定义一个int32类型的字段age, 序号为2
+}
