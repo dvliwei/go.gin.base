@@ -2,11 +2,11 @@ package userController
 
 import (
 	"fmt"
-	"gin.test/extension/log"
 	"gin.test/http/controller"
 	"gin.test/http/proto/httpReponseData"
 	"gin.test/modules/user/userModel"
 	"gin.test/modules/user/userRepositories"
+	"github.com/astaxie/beego/logs"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"io/ioutil"
@@ -26,8 +26,7 @@ func (this *UserController) UserList(ctx *gin.Context)  {
 	//获取所有url里的参数
 	//items:=ctx.Request.URL.Query()
 	//os.Exit(1)
-
-	log.PError("xxx")
+	logs.Error("xxx")
 	id ,_:=  strconv.Atoi(ctx.Query("user_id"))
 
 	//fmt.Println(id)

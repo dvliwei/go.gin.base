@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"gin.test/conf"
 	"gin.test/console"
+	"gin.test/extension/log"
 	"gin.test/extension/server"
 	"gin.test/routers"
 	"github.com/astaxie/beego/toolbox"
@@ -18,6 +20,17 @@ import (
 
 
 func main(){
+
+	fun.LogsInit()
+	timeAt:=time.Now().UnixNano()
+	fmt.Println(timeAt)
+	go func() {
+		fmt.Println("==============")
+		fmt.Println(timeAt)
+		fmt.Println("==============")
+		fmt.Println(time.Now().UnixNano())
+	}()
+
 
 	//设置定时任务
 	if os.Getenv("OPEN_TASK")=="open"{
