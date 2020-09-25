@@ -5,7 +5,7 @@
 @Software: GoLand
 */
 
-package fun
+package log
 
 import (
 	"encoding/json"
