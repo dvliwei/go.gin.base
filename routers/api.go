@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"gin.test/extension/log"
 	"gin.test/extension/server"
 	"gin.test/http/controller/userController"
 	"gin.test/http/middleware"
@@ -11,6 +12,10 @@ import (
 func Routers(){
 	//设置静态文件路口
 	server.Server.Static("/assets", "./assets")
+
+
+	server.Server.GET("/logs",log.ReadLogs)
+	server.Server.GET("/logs_info", log.ReadLogInfo)
 
 	v1:= server.Server.Group("v1")
 	//路由组中添加中间件

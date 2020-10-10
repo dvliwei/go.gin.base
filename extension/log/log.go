@@ -8,9 +8,18 @@
 package log
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	"github.com/gin-gonic/gin"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"path"
+	"strings"
 	"time"
 )
 
@@ -63,4 +72,174 @@ func EventDate()(string){
 	loc, _ := time.LoadLocation(beego.AppConfig.String("TIMEZONE"))
 	tm :=time.Now().In(loc)
 	return tm.Format(beego.AppConfig.String("FormatTable"))
+}
+
+func ReadLogs(c *gin.Context){
+	var html string
+	passWord:=c.DefaultQuery("auth_key","")
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	if passWord=="" || passWord!=os.Getenv("LOG_PASSWORD"){
+		html="<h1>error</h1>"
+		c.String(http.StatusOK ,html)
+		return
+	}
+
+	html +=`<html><head>`
+	html +=`<link rel="stylesheet" type="text/css" href="/assets/css/H-ui.min.css" />`
+	html +=`<link rel="stylesheet" type="text/css" href="/assets/css/H-ui.admin.css" />`
+	html +=`</head>`
+	html +=`<table  class="table table-border table-bg table-bordered" >
+  			<thead>
+    		<tr><th width="20%">日期</th><th>查看</th></tr>
+  		</thead>
+  		<tbody>`
+
+	className :=make(map[int]string)
+	className[0] = "active"
+	className[-1] = "success"
+	className[-2] = "warning"
+	className[-3] = "danger"
+	className[-4] = "active"
+	className[-5] = "success"
+	className[-6] = "warning"
+	html +=`<tr class="`+className[-1]+`"><th>今天</th><td> <a href="/logs_info?date=log&auth_key=`+passWord+`">点击查看</a></td></tr>`
+	for i:=0;i>=-6;i--{
+		date :=time.Now().AddDate(0,0,i).Format("20060102")
+		logFilePath :="cache/"
+		logFileName :="log."+date
+		fileName := path.Join(logFilePath, logFileName)
+		_, err :=os.Stat(fileName)
+		if err !=nil{
+			logs.Error("不存在日志文件")
+			continue
+		}else{
+			html +=`<tr class="`+className[i]+`"><th>`+date+`</th><td> <a href="/logs_info?date=`+date+`&auth_key=`+passWord+`">点击查看</a></td></tr>`
+		}
+
+	}
+
+	html +=`</tbody></table>`
+	html +=`</html>`
+
+	c.String(http.StatusOK ,html)
+	return
+}
+
+
+func ReadLogInfo(c *gin.Context){
+	var html string
+	passWord:=c.DefaultQuery("auth_key","")
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	if passWord=="" || passWord!=os.Getenv("LOG_PASSWORD"){
+		c.String(http.StatusOK ,html)
+		return
+	}
+
+	html +=`<html><head>`
+	html +=`<link rel="stylesheet" type="text/css" href="/assets/css/H-ui.min.css" />`
+	html +=`<link rel="stylesheet" type="text/css" href="/assets/css/H-ui.admin.css" />`
+	html +=`</head>`
+	html +=`<table  class="table table-border table-bg table-bordered" >
+  			<thead>
+    		<tr><th width="20%">ENV</th><th>Actions</th></tr>
+  		</thead>
+  		<tbody>`
+
+	date:=c.DefaultQuery("date",time.Now().Format("20060102"))
+	lines := int64(200)
+	logFilePath :="cache/"
+	logFileName :="log."+date
+	fileName := path.Join(logFilePath, logFileName)
+	file,err:=os.Open(fileName)
+	if err != nil {
+		html = ""
+		c.String(http.StatusOK,html)
+		return
+	}
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	fileInfo, _ := file.Stat()
+	buf := bufio.NewReader(file)
+	offset := fileInfo.Size() % 8192
+	data := make([]byte, 8192) // 一行的数据
+	totalByte := make([][][]byte, 0)
+	readLines := int64(0)
+	for i := int64(0); i <= fileInfo.Size() / 8192; i++{
+		readByte := make([][]byte, 0) // 读取一页的数据
+		file.Seek(fileInfo.Size() - offset - 8192*i, io.SeekStart)
+		data = make([]byte, 8192)
+		n, err := buf.Read(data)
+		if err == io.EOF {
+			if strings.TrimSpace(string(bytes.Trim(data, "\x00"))) != ""{
+				readLines++
+				readByte = append(readByte, data)
+				totalByte = append(totalByte, readByte)
+			}
+			if readLines > lines{
+				break
+			}
+			continue
+		}
+		if err != nil {
+			log.Println("Read file error:", err)
+			return
+		}
+		strs := strings.Split(string(data[:n]), "\n")
+		if len(strs) == 1{
+			b := bytes.Trim([]byte(strs[0]), "\x00")
+			if len(b) == 0{
+				continue
+			}
+		}
+		if (readLines + int64(len(strs))) > lines{
+			strs = strs[int64(len(strs))-lines+readLines:]
+		}
+		for j:=0;j<len(strs);j++{
+			readByte = append(readByte, bytes.Trim([]byte(strs[j]+"\n"),"\x00"))
+		}
+		readByte[len(readByte)-1] = bytes.TrimSuffix(readByte[len(readByte)-1], []byte("\n"))
+		totalByte = append(totalByte, readByte)
+		readLines += int64(len(strs))
+
+		if readLines >= lines{
+			break
+		}
+	}
+	totalByte = reverseByteArray(totalByte)
+	str :=byteArrayToString(totalByte)
+	for _, v := range str {
+		if len(v)==0{
+			continue
+		}
+
+		html +=`<tr class=""><td>local</td><td>`+v+`</td></tr>`
+	}
+
+
+	html +=`</tbody></table>`
+	html +=`</html>`
+	c.String(http.StatusOK,html)
+	return
+}
+
+
+func reverseByteArray(s [][][]byte) [][][]byte {
+	for from, to := 0, len(s)-1; from < to; from, to = from+1, to-1 {
+		s[from], s[to] = s[to], s[from]
+	}
+	return s
+}
+
+func byteArrayToString(buf [][][]byte) []string {
+	str := make([]string, 0)
+	for _, v := range buf {
+		for _, vv := range v {
+			str = append(str, string(vv))
+		}
+	}
+	return str
 }
