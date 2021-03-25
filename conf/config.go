@@ -14,6 +14,8 @@ var PORT string //服务器端口
 
 var SERVER_DB  *gorm.DB //数据库
 
+var SERVER_LOG_DB *gorm.DB //日志数据库
+
 var PREDIS *redis.Client //redis
 
 var TIMEZONE string //时区
@@ -42,6 +44,15 @@ func init(){
 			os.Getenv("DB_PASSWORD")+"" +
 			"@tcp("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")/"+os.Getenv("DB_DATABASE")+"?charset="+
 			os.Getenv("DB_CHARSET")+"&parseTime=True&loc=Local")
+	if err!=nil{
+		log.Fatal("connection mysql fail", err.Error())
+	}
+
+	SERVER_LOG_DB,err= gorm.Open(os.Getenv("LOG_DB_CONNECTION"),
+		os.Getenv("LOG_DB_USERNAME")+":"+
+			os.Getenv("LOG_DB_PASSWORD")+"" +
+			"@tcp("+os.Getenv("LOG_DB_HOST")+":"+os.Getenv("LOG_DB_PORT")+")/"+os.Getenv("LOG_DB_DATABASE")+"?charset="+
+			os.Getenv("LOG_DB_CHARSET")+"&parseTime=True&loc=Local")
 	if err!=nil{
 		log.Fatal("connection mysql fail", err.Error())
 	}

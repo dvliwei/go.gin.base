@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"encoding/json"
 	"fmt"
 	"gin.test/http/controller"
 	"gin.test/http/proto/httpReponseData"
@@ -8,8 +9,6 @@ import (
 	"gin.test/modules/user/userRepositories"
 	"github.com/astaxie/beego/logs"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/proto"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 )
@@ -69,6 +68,7 @@ func (this *UserController) ProtoDemo(c *gin.Context)  {
 	//result.Name = "天才"
 	//result.Age= 12
 
+
 	data:=&httpReponseData.User{
 		Name:"天才",
 		Age:12,
@@ -79,19 +79,29 @@ func (this *UserController) ProtoDemo(c *gin.Context)  {
 
 }
 
-func (this *UserController)ParsingProtoDemo(c *gin.Context)  {
-	resp, err := http.Get("http://127.0.0.1:1213/v1/user/proto")
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			user := &httpReponseData.User{}
-			proto.UnmarshalMerge(body, user)
-			fmt.Println(user.Age)
-		}
+func (this *UserController)ParsingProtoDemo(ctx *gin.Context)  {
+
+
+	postData:=make(map[string]interface{})
+	ctx.Request.ParseForm()
+	for k, v := range ctx.Request.PostForm {
+		postData[k]= v
 	}
+	postDataStr,_:=json.Marshal(postData)
+	fmt.Println(string(postDataStr))
+
+	//resp, err := http.Get("http://127.0.0.1:1213/v1/user/proto")
+	//if err != nil {
+	//	fmt.Println(err)
+	//} else {
+	//	defer resp.Body.Close()
+	//	body, err := ioutil.ReadAll(resp.Body)
+	//	if err != nil {
+	//		fmt.Println(err)
+	//	} else {
+	//		user := &httpReponseData.User{}
+	//		proto.UnmarshalMerge(body, user)
+	//		fmt.Println(user.Age)
+	//	}
+	//}
 }

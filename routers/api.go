@@ -39,7 +39,7 @@ func Routers(){
 		userGroup.GET("/query",user.UserList)
 		userGroup.POST("/register",user.Register)
 		userGroup.GET("/proto",user.ProtoDemo)
-		userGroup.GET("/parsing_proto",user.ParsingProtoDemo)
+		userGroup.POST("/parsing_proto",user.ParsingProtoDemo)
 
 	}
 }
