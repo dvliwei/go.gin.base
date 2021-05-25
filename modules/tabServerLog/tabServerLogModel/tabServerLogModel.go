@@ -10,6 +10,8 @@ package tabServerLogModel
 
 import (
 	"gin.test/conf"
+	"gin.test/extension/md5"
+	"gin.test/extension/redis"
 	"github.com/jinzhu/gorm"
 	"os"
 	"time"
@@ -32,10 +34,20 @@ func (TabServerLogModel)TableName()string  {
 //@Description 同样的账号密码可以注册不同的游戏
 //@param tableName string
 func (TabServerLogModel) CheckAndCreateTable(tableName string){
-	if !conf.SERVER_LOG_DB.HasTable(tableName){
-		conf.SERVER_LOG_DB.Table(tableName).Set("gorm:table_options", "ENGINE=Myisam DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='服务器日志'").
-			CreateTable(&TabServerLogModel{})
+	cacheKey:=os.Getenv("REDIS_PREFIX")+md5.StrMd5(tableName)
+	if redis.HasRedis(cacheKey){
+		return
+
+	}else{
+		if !conf.SERVER_LOG_DB.HasTable(tableName){
+			conf.SERVER_LOG_DB.Table(tableName).Set("gorm:table_options", "ENGINE=Myisam DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='服务器日志'").
+				CreateTable(&TabServerLogModel{})
+		}else{
+			//dbLog.ServerInfoMap("存储tab_user表是否存在判断结果", map[string]interface{}{"tabName":tableName,"key":cacheKey})
+			redis.SetDataToRedisWithSecond(cacheKey,1,86400)
+		}
 	}
+
 }
 
 // @Description 插入数据

@@ -60,6 +60,55 @@ func ServerError(keyName string,logValue ...interface{}){
 	}()
 }
 
+
+
+
+/**
+* @Title ServerInfoMap
+* @Description:json存储日志
+* @Param:
+* @return:
+* @Author: liwei
+* @Date: 2021/4/14
+**/
+func ServerInfoMap(keyName string,logMapValue map[string]interface{}){
+	var model tabServerLogModel.TabServerLogModel
+	model.LogType = "I"
+	model.LogKey = keyName
+	bValue,err:=json.Marshal(logMapValue)
+	if err!=nil{
+		model.LogValue = err.Error()
+	}else{
+		model.LogValue = string(bValue)
+	}
+	go func(model tabServerLogModel.TabServerLogModel) {
+		model.NewData(model)
+	}(model)
+}
+
+/**
+* @Title ServerErrorMap
+* @Description:  json存储错误日志
+* @Param:
+* @return:
+* @Author: liwei
+* @Date: 2021/4/14
+**/
+func ServerErrorMap(keyName string,logMapValue map[string]interface{}){
+	var model tabServerLogModel.TabServerLogModel
+	model.LogType = "E"
+	model.LogKey = keyName
+	bValue,err:=json.Marshal(logMapValue)
+	if err!=nil{
+		model.LogValue = err.Error()
+	}else{
+		model.LogValue = string(bValue)
+	}
+	go func(tabServerLogModel.TabServerLogModel) {
+		model.NewData(model)
+	}(model)
+}
+
 func DropLogData(logDate string)  {
 	var model tabServerLogModel.TabServerLogModel
 	model.DropDate(logDate)

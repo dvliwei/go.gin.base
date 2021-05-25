@@ -10,10 +10,13 @@ package console
 
 import (
 	"gin.test/console/command"
+	"gin.test/console/command/logCleanUpCommand"
 	"github.com/astaxie/beego/toolbox"
 )
 var GameTK1 *toolbox.Task
+var LogCleanUpTask *toolbox.Task
 
 func init(){
 	GameTK1 = toolbox.NewTask("tk1","* * * * * *", command.TestTaskCommand)
+	LogCleanUpTask = toolbox.NewTask("清理日志","0 0 1 * * *", logCleanUpCommand.CleanUpLog)
 }

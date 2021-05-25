@@ -20,6 +20,7 @@ import (
 func main(){
 
 	//log.LogsInit()
+
 	//设置定时任务
 	if os.Getenv("OPEN_TASK")=="open"{
 		toolbox.AddTask("tk1",console.GameTK1)
