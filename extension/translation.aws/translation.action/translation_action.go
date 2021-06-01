@@ -9,14 +9,14 @@
 package translation_action
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/translate"
 	"go.translation.api/extension/dbLog"
 	"go.translation.api/extension/md5"
 	"go.translation.api/extension/redis"
 	"go.translation.api/extension/translation.aws"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"os"
 )
 
@@ -44,8 +44,8 @@ func TranslationAction(tranInput  translation_aws.TranslationInput)(translation_
 				"errr":err,
 				"resultStr":resultStr,
 			})
-			redis.SetDataToRedisWithSecond(translationCacheKey,resultStr,86400*90)
 		}
+		redis.SetDataToRedisWithSecond(translationCacheKey,resultStr,86400*90)
 	}
 	resultStr,err :=redis.GetRedisDataByKey(translationCacheKey)
 	if err!=nil{
@@ -99,7 +99,7 @@ func awsTranslation()(string,error)  {
 
 
 func TranslationCodeList()(map[string]string){
-	var result map[string]string
+	result:=make(map[string]string)
 	result["af"]="南非荷兰语"
 	result["sq"]="阿尔巴尼亚语"
 	result["am"]="阿姆哈拉语"
