@@ -3,13 +3,13 @@
  * @Description //TODO 
  * @Author liwei
  * @Date 2020/4/7 10:38
- * @Version gin.test V1.0
+ * @Version go.translation.api V1.0
  **/
 
 package redis
 
 import (
-	"gin.test/conf"
+	"go.translation.api/conf"
 	"github.com/astaxie/beego/logs"
 	"time"
 )

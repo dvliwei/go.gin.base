@@ -10,7 +10,7 @@ package dbLog
 
 import (
 	"encoding/json"
-	"gin.test/modules/tabServerLog/tabServerLogModel"
+	"go.translation.api/modules/tabServerLog/tabServerLogModel"
 	"reflect"
 	"strconv"
 )

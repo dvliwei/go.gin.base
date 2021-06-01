@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"github.com/gin-gonic/gin"
+	"go.translation.api/extension/dbLog"
+	"strconv"
 	"time"
 )
 
@@ -79,3 +82,74 @@ var HTTP_ERROR_REQUEST_HEADER_FAIL = GinResultError{Code:401,Message:"Unauthoriz
 //参数错误20000开头业务错误
 
 var HTTP_ERROR_NOT_FOUND_USER = GinResultError{Code:20000,Message:"not  found user"}
+
+var HTTP_ERROR_TRANSLATION_FAIL = GinResultError{Code:20001,Message:"translation  is fail"}
+
+
+/**
+* @Title GetString
+* @Description:  获取 字符串参数
+* @Param:
+* @return:
+* @Author: liwei
+* @Date: 2020/5/29
+**/
+func (this *GinBaseController)GetString(key string,defaultvalue string,c *gin.Context) string{
+	param:= c.Query(key)
+	if param=="" {
+		param = c.PostForm(key)
+		if param==""{
+			param = defaultvalue
+		}
+	}
+	return param
+
+}
+
+/**
+* @Title GetInt
+* @Description:  获取int参数
+* @Param:
+* @return:
+* @Author: liwei
+* @Date: 2020/5/29
+**/
+func (this *GinBaseController)GetInt(key string,defaultvalue int,c *gin.Context)(int){
+	param:= c.Query(key)
+	if param=="" {
+		param = c.PostForm(key)
+		if param==""{
+			return defaultvalue
+		}
+	}
+	intValue,err:=strconv.Atoi(param)
+	if err!=nil{
+		dbLog.ServerError("非法的请求参数 预期值为int 实际上传参数为",param)
+		return defaultvalue
+	}
+	return intValue
+}
+
+/**
+* @Title GetFloat64ToInt
+* @Description:  float64转int
+* @Param:
+* @return:
+* @Author: liwei
+* @Date: 2020/5/29
+**/
+func (this *GinBaseController) GetFloat64(key string,defaultvalue float64,c *gin.Context) float64  {
+	param:= c.Query(key)
+	if param=="" {
+		param = c.PostForm(key)
+		if param==""{
+			return defaultvalue
+		}
+	}
+	float64Value,err :=strconv.ParseFloat(param,32/64)
+	if err!=nil{
+		return defaultvalue
+	}else{
+		return float64Value
+	}
+}

@@ -3,7 +3,7 @@
  * @Description //TODO 
  * @Author liwei
  * @Date 2020/6/15 16:19
- * @Version gin.test V1.0
+ * @Version go.translation.api V1.0
  **/
 
 package command

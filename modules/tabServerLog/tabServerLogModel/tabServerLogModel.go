@@ -9,11 +9,13 @@
 package tabServerLogModel
 
 import (
-	"gin.test/conf"
-	"gin.test/extension/md5"
-	"gin.test/extension/redis"
+	"go.translation.api/conf"
+	"go.translation.api/extension/md5"
+	"go.translation.api/extension/redis"
 	"github.com/jinzhu/gorm"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -89,4 +91,34 @@ func(table TabServerLogModel)CreateTable(logDate string){
 	tableName := "tab_server_log_"+logDate
 	table.CheckAndCreateTable(tableName)
 	return
+}
+
+
+func (table TabServerLogModel)GetLogTabName()[]string  {
+	items:=make([]string,0)
+	sql:="select table_name from information_schema.tables where table_schema='project_cdkey_shop' and table_name like '%tab_server_log_%' ORDER BY TABLE_NAME desc"
+	rows,err:=conf.SERVER_LOG_DB.Raw(sql).Rows()
+	defer  rows.Close()
+	if err!=nil{
+		return items
+	}
+	var table_name string
+	for rows.Next(){
+		rows.Scan(&table_name)
+		table_name=strings.Replace(table_name,"tab_server_log_","",-1)
+		items=append(items,table_name)
+	}
+	return items
+}
+
+func (table TabServerLogModel)GetDayLogsWithPage(logDate string,page int)([]TabServerLogModel, int)  {
+	tableName := "tab_server_log_"+logDate
+	table.CheckAndCreateTable(tableName)
+	var models []TabServerLogModel
+	count:=0
+	db :=conf.SERVER_LOG_DB.Table(tableName)
+	db.Count(&count)
+	pageSize,_:= strconv.Atoi(os.Getenv("PAGE_SIZE"))
+	db.Order("id desc").Offset((page-1)*pageSize).Limit(pageSize).Find(&models)
+	return models,count
 }

@@ -1,45 +1,70 @@
 package routers
 
 import (
-	"gin.test/extension/log"
-	"gin.test/extension/server"
-	"gin.test/http/controller/userController"
-	"gin.test/http/middleware"
+	"bufio"
 	"github.com/gin-gonic/gin"
+	"go.translation.api/extension/dbLog"
+	"go.translation.api/extension/server"
+	"go.translation.api/http/admin/controller/log.controller"
+	"go.translation.api/http/controller/translationController"
+	"os/exec"
 )
 
 
 func Routers(){
 	//设置静态文件路口
 	server.Server.Static("/assets", "./assets")
-
-
-	server.Server.GET("/logs",log.ReadLogs)
-	server.Server.GET("/logs_info", log.ReadLogInfo)
-
-	v1:= server.Server.Group("v1")
-	//路由组中添加中间件
-	//v1.Use(middleware.HttpHeaderVerification())
-	v1.Use(middleware.AppMiddleWare())
+	version :=server.Server.Group("version")
 	{
-		v1.GET("/ping", func(context *gin.Context) {
+		version.GET("/", func(context *gin.Context) {
+			cmd := exec.Command("/bin/bash", "-c", `git log`)
+			//创建获取命令输出管道
+			stdout, err := cmd.StdoutPipe()
+			if err != nil {
+				dbLog.ServerError("Error:can not obtain stdout pipe for command",err)
+				context.JSON(-1,gin.H{
+					"meeeage":"fail",
+				})
+				return
+			}
+
+			//执行命令
+			if err := cmd.Start(); err != nil {
+				dbLog.ServerError("Error:The command is err",err)
+				context.JSON(-1,gin.H{
+					"meeeage":"fail",
+				})
+			}
+			//使用带缓冲的读取器
+			outputBuf := bufio.NewReader(stdout)
+			//只读区第一行
+			output, _, err := outputBuf.ReadLine()
+			commit:=string(output)
 			context.JSON(200,gin.H{
 				"meeeage":"ok",
-				"id":context.Query("id"),
+				"version":commit,
 			})
 		})
 	}
 
-	//区分路由组
-	userGroup :=v1.Group("/user")
+	v1:= server.Server.Group("v1")
+	translationGroup:=v1.Group("tran")
 	{
-		//绑定controller
-		user :=userController.UserController{}
-		//指定controller
-		userGroup.GET("/query",user.UserList)
-		userGroup.POST("/register",user.Register)
-		userGroup.GET("/proto",user.ProtoDemo)
-		userGroup.POST("/parsing_proto",user.ParsingProtoDemo)
+		tran:=  translationController.TranslationController{}
+		translationGroup.Any("action",tran.ActionTranslation)
+		translationGroup.Any("tran_list",tran.ActionTranslationList)
+	}
 
+
+
+	ser :=server.Server
+	ser.LoadHTMLGlob("templates/*")
+	web:=ser.Group("web",gin.BasicAuth(gin.Accounts{
+		"admin@admin.com":"app@2021",
+	}))
+	logGroup :=web.Group("log")
+	{
+		log :=log_controller.LogController{}
+		logGroup.GET("list",log.LogList)
 	}
 }

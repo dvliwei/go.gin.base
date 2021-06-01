@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"gin.test/conf"
-	"gin.test/console"
-	"gin.test/extension/server"
-	"gin.test/routers"
+	"go.translation.api/conf"
+	"go.translation.api/console"
+	"go.translation.api/extension/server"
+	"go.translation.api/routers"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/toolbox"
 	"github.com/gin-gonic/gin"

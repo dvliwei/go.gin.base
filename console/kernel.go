@@ -3,14 +3,14 @@
  * @Description //TODO 定时任务
  * @Author liwei
  * @Date 2020/6/15 16:17
- * @Version gin.test V1.0
+ * @Version go.translation.api V1.0
  **/
 
 package console
 
 import (
-	"gin.test/console/command"
-	"gin.test/console/command/logCleanUpCommand"
+	"go.translation.api/console/command"
+	"go.translation.api/console/command/logCleanUpCommand"
 	"github.com/astaxie/beego/toolbox"
 )
 var GameTK1 *toolbox.Task

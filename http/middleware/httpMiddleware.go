@@ -3,13 +3,13 @@
  * @Description  http 请求 header 头信息验证 //TODO
  * @Author liwei
  * @Date 2020/3/13 15:44
- * @Version gin.test V1.0
+ * @Version go.translation.api V1.0
  **/
 
 package middleware
 
 import (
-	"gin.test/http/controller"
+	"go.translation.api/http/controller"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/config/env"
 	"github.com/gin-gonic/gin"

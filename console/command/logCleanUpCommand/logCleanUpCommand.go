@@ -9,7 +9,7 @@
 package logCleanUpCommand
 
 import (
-	"gin.test/extension/dbLog"
+	"go.translation.api/extension/dbLog"
 	"os"
 	"time"
 )

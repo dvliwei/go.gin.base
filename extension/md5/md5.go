@@ -3,7 +3,7 @@
  * @Description //TODO 
  * @Author liwei
  * @Date 2021/5/25 11:27
- * @Version gin.test V1.0
+ * @Version go.translation.api V1.0
  **/
 
 package md5
